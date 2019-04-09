@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>Three.js</title>
+        <style>
+body {
+    margin: 0;
+    overflow: hidden;
+}
+        </style>
+    </head>
+    <body>
+        <div id="WebGL-output">
+        </div>
+        <script src="//cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+        <script src="OrbitControls.js"></script>
+        <script type="text/javascript">
+
+var camera, scene, renderer, controls;
+var planeGeo, planeMat, plane;
+var cubeGeo, cubeMat, cube;
+var spotLight;
+var clock = new THREE.Clock();
+var delta = 0;
+var total = 0;
+var step = 0;
+
+var collisionObjs = []
+var projectiles = []
+var suppressMsg = new THREE.Vector3();
+var intersections = [];
+var startPos = new THREE.Vector3(-5, 1, 0);
+const maxDist = 20;
+
+init();
+animate();
+
+function init() {
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 100 );
+    camera.position.set(2, 2, 2);
+
+    controls = new THREE.OrbitControls( camera );
+    controls.update();
+
+    var axesHelper = new THREE.AxesHelper( 3 );
+    scene.add(axesHelper);
+
+    var cubeAxes = new THREE.AxesHelper( 2 );
+
+    var light = new THREE.HemisphereLight( 0xffffbb, 0x080820, 1 );
+    scene.add(light);
+
+    spotLight = new THREE.SpotLight( 0xffffff );
+    spotLight.position.set( -2, 10, 0 );
+    scene.add( spotLight );
+
+    planeGeo = new THREE.PlaneGeometry(64, 40);
+    planeMat = new THREE.MeshStandardMaterial({color: 0xeeeeee});
+    plane = new THREE.Mesh(planeGeo, planeMat);
+    scene.add(plane);
+    plane.rotateX(THREE.Math.degToRad(-90));
+
+    cubeGeo = new THREE.CubeGeometry(0.2, 0.2, 0.2);
+    cubeMat = new THREE.MeshStandardMaterial({color: 0x00eeee});
+    cube = new THREE.Mesh(cubeGeo, cubeMat); 
+    cube.translateY(0.5);
+    cube.add(cubeAxes);
+    scene.add(cube);
+
+    dodecGeo = new THREE.DodecahedronGeometry(0.4, 0);
+    dodecMat = new THREE.MeshStandardMaterial({color: 0xee00ee});
+    dodec = new THREE.Mesh(dodecGeo, dodecMat); 
+    dodec.position.copy(startPos);
+    scene.add(dodec);
+
+    spotLight.target = dodec;
+
+    sphereGeo = new THREE.SphereGeometry(0.2, 16, 16);
+    sphereMat = new THREE.MeshStandardMaterial({color: 0xeeeeee});
+    sphere = new THREE.Mesh(sphereGeo, sphereMat); 
+    sphere.translateY(4.0);
+    sphere.translateX(1);
+    scene.add( sphere );
+
+    collisionObjs.push(cube);
+
+    cube.lookAt(sphere.position);
+
+    renderer = new THREE.WebGLRenderer( { antialias: true } );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+}
+
+function animate() {
+    requestAnimationFrame( animate );
+
+    delta = clock.getDelta();
+    total += delta;
+    if(total > 0.5) {
+        total = 0;
+        var s = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshStandardMaterial({color: 0xff0000}));
+        var r = new THREE.Raycaster();
+        var projectile = {mesh: s, raycaster: r};
+        projectile.mesh.position.copy(dodec.position);
+        projectile.mesh.lookAt(cube.position);
+        projectile.raycaster.set(projectile.mesh.position, projectile.mesh.getWorldDirection(suppressMsg));
+        projectile.raycaster.far = 0.2;
+        scene.add(projectile.mesh);
+        projectiles.push(projectile);
+    }
+
+    for(p in projectiles) {
+        projectiles[p].mesh.translateZ(0.1);
+        projectiles[p].raycaster.ray.origin.copy(projectiles[p].mesh.position);
+        intersections = projectiles[p].raycaster.intersectObjects(collisionObjs);
+        if(intersections.length > 0) {
+            scene.remove(projectiles[p].mesh);
+            projectiles.splice(p, 1);
+        }
+        else {
+            if(projectiles[p].mesh.position.x > maxDist) {
+                scene.remove(projectiles[p].mesh);
+                projectiles.splice(p, 1);
+            }
+            if(projectiles[p].mesh.position.y > maxDist) {
+                scene.remove(projectiles[p].mesh);
+                projectiles.splice(p, 1);
+            }
+            if(projectiles[p].mesh.position.z > maxDist) {
+                scene.remove(projectiles[p].mesh);
+                projectiles.splice(p, 1);
+            }
+        }
+
+    }
+    cube.translateZ(0.001);
+
+    step += 0.02;
+    dodec.position.z = 4*Math.sin(step);
+    dodec.position.x = 4*Math.cos(step);
+
+    controls.update();
+    renderer.render( scene, camera );
+}
+
+        </script>
+    </body>
+</html>
