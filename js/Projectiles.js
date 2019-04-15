@@ -1,9 +1,8 @@
 var arrows = []
-var inter = []
 
 var moveArrows = function(delta) {
     arrows.forEach(arrow => {
-        arrow.model.translateZ(-300*delta);
+        arrow.model.translateZ(arrow.power*-300*delta);
 
         let removeDist = 1500;
 
@@ -19,8 +18,9 @@ var moveArrows = function(delta) {
         }
 
         arrow.raycaster.ray.origin.copy(arrow.model.position);
+
         spiders.forEach( spider => {
-        inter = arrow.raycaster.intersectObject(spider.collBox);
+        var inter = arrow.raycaster.intersectObject(spider.collBox);
             if(inter.length > 0) {
                 let arrowIndex = arrows.indexOf(arrow);
                 arrows.splice(arrowIndex, 1);
@@ -29,8 +29,22 @@ var moveArrows = function(delta) {
                 spiders.splice(spiderIndex, 1);
                 scene.remove(spider.model);
                 scene.remove(spider.collBox);
+                score = document.getElementById('score');
+                totalScore += 100 * arrow.power;
+                score.innerHTML = Math.floor(totalScore);
             }
         });
     });
 }
 
+var updateScore = function() {
+    if(mouseIsDown) {
+        powerText = document.getElementById('power');
+        var value = parseInt(powerText.innerHTML);
+        currentTime = performance.now();
+        var power = Math.ceil((currentTime - mouseDownTime) / 10);
+        if(power <= 100) {
+            powerText.innerHTML = power;
+        }
+    }
+}

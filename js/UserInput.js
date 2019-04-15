@@ -1,3 +1,9 @@
+var mouseDownTime = 0;
+var mouseUpTime = 0;
+var discardFirstArrow = false;
+var currentTime = 0;
+var mouseIsDown = false;
+var startTime = 0;
 
 var onKeyDown = function ( event ) {
 
@@ -60,9 +66,24 @@ var onKeyUp = function ( event ) {
 
 };
 var onMouseDown = function ( event ) {
+    mouseDownTime = performance.now();
+    mouseIsDown = true;
+
+};
+
+var onMouseUp= function ( event ) {
+    mouseUpTime = performance.now();
+    power = (mouseUpTime - mouseDownTime) / 500;
+    if(power > 2) {
+        power = 2;
+    }
+    if(power < 0.2) {
+        power = 0.3;
+    }
+
     var r = new THREE.Raycaster();
     var m = model_arrow.clone();
-    var arrow = {model: m, raycaster: r};
+    var arrow = {model: m, raycaster: r, power: power};
 
     m.position.copy(camera.getWorldPosition(suppressMsg));
     m.quaternion.copy(camera.getWorldQuaternion());
@@ -72,10 +93,14 @@ var onMouseDown = function ( event ) {
 
     scene.add(arrow.model);
     arrows.push(arrow);
+    currentTime = 0;
+    mouseDownTime = 0;
+    mouseIsDown = false;
 };
 
 document.addEventListener( 'keydown', onKeyDown, false );
 document.addEventListener( 'keyup', onKeyUp, false );
 document.addEventListener( 'mousedown', onMouseDown, false );
+document.addEventListener( 'mouseup', onMouseUp, false );
 
 

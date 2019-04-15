@@ -1,6 +1,8 @@
 //var camera, scene, renderer, controls;
 var clock = new THREE.Clock();
 var suppressMsg = new THREE.Vector3();
+var floors = [];
+var texLoader = new THREE.TextureLoader();
 
 var setup = function() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
@@ -49,6 +51,7 @@ var createEnv = function() {
     floorGeo.rotateX( - Math.PI / 2 );
     var floorMaterial = new THREE.MeshStandardMaterial( { color: 0x006600 } );
     var floor = new THREE.Mesh( floorGeo, floorMaterial );
+    floors.push(floor);
     scene.add( floor );
 
     var fort = model_fort.clone();
@@ -66,6 +69,8 @@ var createEnv = function() {
     addSpider(0, 0, -400);
     addSpider(400, 0, 0);
     addSpider(-400, 0, 0);
+
+    addMoon(200, 600, -400);
 }
 
 var addTree = function(x, y, z) {
@@ -75,12 +80,12 @@ var addTree = function(x, y, z) {
 }
 
 var addSpider = function(x, y, z) {
-    var boxGeo = new THREE.CubeGeometry(40, 50, 80);
+    var boxGeo = new THREE.CubeGeometry(40, 40, 80);
     var boxMat = new THREE.MeshStandardMaterial({color:0xff0000});
     var collisionBox = new THREE.Mesh(boxGeo, boxMat);
     //collisionBox.material.visible = false;
     //offset to make the box fit better
-    collisionBox.position.set(x, y+20, z+40);
+    collisionBox.position.set(x+6, y+20, z+40);
     scene.add(collisionBox);
 
     var spider = model_spider.clone();
@@ -103,6 +108,17 @@ var addTreeCluster = function(x, y, z) {
     addTree(x+100, y, z-100);
     addTree(x-100, y, z-100);
     addTree(x-100, y, z+100);
-
 }
 
+var addMoon = function(x, y, z) {
+    var moonGeo = new THREE.SphereGeometry( 50, 20, 20 );
+    var moonMat = new THREE.MeshBasicMaterial({color: 0xffffbb, fog: false});
+    var moon = new THREE.Mesh( moonGeo, moonMat );
+    moon.position.set(x, y, z);
+    scene.add(moon);
+}
+
+
+function getRandomRange(min, max) {
+    return Math.random() * (max - min) + min;
+}

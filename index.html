@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Game</title>
+        <title>Tower Game</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <style>
@@ -63,6 +63,22 @@ html, body {
                 font-size: 50px;
                 color: rgba(255,255,255,0.5);
             }
+            #score-wrapper {
+                position: absolute;
+                top: 0;
+                left: 0;
+                margin-left: 10px;
+                font-size: 50px;
+                color: rgba(255,255,255,0.5);
+            }
+            #power-wrapper {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                margin-left: 10px;
+                font-size: 50px;
+                color: rgba(255,255,255,0.5);
+            }
 
         </style>
     </head>
@@ -84,15 +100,23 @@ html, body {
                 <br />
                 (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
             </div>
-
+        </div>
+        <div id="score-wrapper">
+            Score: <span id="score">0</span>
+        </div>
+        <div id="power-wrapper">
+            Power: <span id="power">0</span>
         </div>
         <div id="crosshair">
             &#8853;
         </div>
+
         <script>
 
 
 var camera, scene, renderer, controls;
+var totalScore = 0;
+var totalTime = 0;
 var mixers = [];
 var enemies = [];
 
@@ -103,10 +127,9 @@ function init() {
     loadModels();
     setup();
     THREE.DefaultLoadingManager.onLoad = function ( ) {
-    createEnv();
-	console.log( 'Loading Complete!');
-
-};
+        createEnv();
+        console.log( 'Loading Complete!');
+    };
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -127,6 +150,7 @@ function animate() {
 
     if ( controls.isLocked === true ) {
         let delta = clock.getDelta();
+        totalTime += delta;
         mixers.forEach(m => {
             if(m != null) {
                 m.update(delta);
@@ -135,6 +159,7 @@ function animate() {
         movePlayer(delta);
         moveSpiders(delta);
         moveArrows(delta);
+        updateScore();
 
     }
 
