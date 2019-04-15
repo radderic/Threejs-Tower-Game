@@ -79,6 +79,14 @@ html, body {
                 font-size: 50px;
                 color: rgba(255,255,255,0.5);
             }
+            #time-wrapper {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translate(-50%, 0);
+                font-size: 50px;
+                color: rgba(255,255,255,0.5);
+            }
 
         </style>
     </head>
@@ -107,6 +115,10 @@ html, body {
         <div id="power-wrapper">
             Power: <span id="power">0</span>
         </div>
+        <div id="time-wrapper">
+            Time Remaining:
+            <span id="time">0</span>
+        </div>
         <div id="crosshair">
             &#8853;
         </div>
@@ -114,7 +126,7 @@ html, body {
         <script>
 
 
-var camera, scene, renderer, controls;
+            var camera, scene, renderer, controls;
 var totalScore = 0;
 var totalTime = 0;
 var mixers = [];
@@ -151,11 +163,16 @@ function animate() {
     if ( controls.isLocked === true ) {
         let delta = clock.getDelta();
         totalTime += delta;
+
+        //updates animations for all imported models
         mixers.forEach(m => {
             if(m != null) {
                 m.update(delta);
             }
         });
+        time = document.getElementById('time');
+        time.innerHTML = 360 - Math.floor(totalTime);
+
         movePlayer(delta);
         moveSpiders(delta);
         moveArrows(delta);

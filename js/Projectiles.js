@@ -4,7 +4,7 @@ var moveArrows = function(delta) {
     arrows.forEach(arrow => {
         arrow.model.translateZ(arrow.power*-300*delta);
 
-        let removeDist = 1500;
+        let removeDist = 1200;
 
         if(arrow.model.position.x > removeDist ||
             arrow.model.position.x < -removeDist ||
@@ -20,7 +20,7 @@ var moveArrows = function(delta) {
         arrow.raycaster.ray.origin.copy(arrow.model.position);
 
         spiders.forEach( spider => {
-        var inter = arrow.raycaster.intersectObject(spider.collBox);
+            var inter = arrow.raycaster.intersectObject(spider.collBox);
             if(inter.length > 0) {
                 let arrowIndex = arrows.indexOf(arrow);
                 arrows.splice(arrowIndex, 1);

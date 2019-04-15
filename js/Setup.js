@@ -44,7 +44,7 @@ var createEnv = function() {
     scene.background = new THREE.Color( 0x111111 );
     scene.fog = new THREE.Fog( 0x111111, 0, 600 );
 
-    var light = new THREE.AmbientLight( 0xffffff, 2.7 );
+    var light = new THREE.AmbientLight( 0xffffff, 2.0 );
     scene.add( light );
 
     var floorGeo = new THREE.PlaneBufferGeometry( 2000, 2000, 100, 100 );
