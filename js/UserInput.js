@@ -60,13 +60,18 @@ var onKeyUp = function ( event ) {
 
 };
 var onMouseDown = function ( event ) {
-    arrow = model_arrow.clone();
-    arrow.position.copy(camera.getWorldPosition(suppressMsg));
-    arrow.quaternion.copy(camera.getWorldQuaternion());
-    scene.add(arrow);
+    var r = new THREE.Raycaster();
+    var m = model_arrow.clone();
+    var arrow = {model: m, raycaster: r};
+
+    m.position.copy(camera.getWorldPosition(suppressMsg));
+    m.quaternion.copy(camera.getWorldQuaternion());
+
+    arrow.raycaster.set(arrow.model.position, camera.getWorldDirection(suppressMsg));
+    arrow.raycaster.far = 10;
+
+    scene.add(arrow.model);
     arrows.push(arrow);
-
-
 };
 
 document.addEventListener( 'keydown', onKeyDown, false );

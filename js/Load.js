@@ -17,7 +17,6 @@ var loadModels = function () {
             model_spider.quaternion.copy(quaternion);
             model_spider.lookAt(0,0,0);
 
-            model_spider.position.set(0,0,400);
             model_spider.scale.set(5,5,5);
 
             var mixer = new THREE.AnimationMixer(model_spider);

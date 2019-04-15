@@ -7,6 +7,8 @@ var setup = function() {
 
     scene = new THREE.Scene();
     controls = new THREE.PointerLockControls( camera );
+    //player starting position
+    controls.getObject().position.y = 140;
 
     var blocker = document.getElementById( 'blocker' );
     var instructions = document.getElementById( 'instructions' );
@@ -40,7 +42,7 @@ var createEnv = function() {
     scene.background = new THREE.Color( 0x111111 );
     scene.fog = new THREE.Fog( 0x111111, 0, 600 );
 
-    var light = new THREE.AmbientLight( 0xffffff, 0.7 );
+    var light = new THREE.AmbientLight( 0xffffff, 2.7 );
     scene.add( light );
 
     var floorGeo = new THREE.PlaneBufferGeometry( 2000, 2000, 100, 100 );
@@ -55,8 +57,35 @@ var createEnv = function() {
     fort.translateZ(-170);
     scene.add(fort);
 
+    addTreeCluster(400, 0, 400);
+    addTreeCluster(-400, 0, -400);
+    addTreeCluster(400, 0, -400);
+    addTreeCluster(-400, 0, 400);
+
+    addSpider(0, 0, 400);
+    addSpider(0, 0, -400);
+    addSpider(400, 0, 0);
+    addSpider(-400, 0, 0);
+}
+
+var addTree = function(x, y, z) {
+    var tree = model_tree.clone();
+    tree.position.set(x, y, z);
+    scene.add(tree);
+}
+
+var addSpider = function(x, y, z) {
+    var boxGeo = new THREE.CubeGeometry(40, 50, 80);
+    var boxMat = new THREE.MeshStandardMaterial({color:0xff0000});
+    var collisionBox = new THREE.Mesh(boxGeo, boxMat);
+    //collisionBox.material.visible = false;
+    //offset to make the box fit better
+    collisionBox.position.set(x, y+20, z+40);
+    scene.add(collisionBox);
+
     var spider = model_spider.clone();
-    spider.position.set(0,150,0);
+    spider.position.set(x, y, z);
+    //spider.lookAt(0,0,0);
     scene.add(spider);
     var mixer = new THREE.AnimationMixer(spider);
     mixers.push(mixer);
@@ -64,9 +93,16 @@ var createEnv = function() {
         action = mixer.clipAction(clip);
         action.play();
     });
+    var s = { model: spider, collBox: collisionBox };
+    spiders.push(s);
+}
 
-    var tree = model_tree.clone();
-    tree.position.set(400, 0, 400);
-    scene.add(tree);
+var addTreeCluster = function(x, y, z) {
+    addTree(x, y, z);
+    addTree(x+100, y, z+100);
+    addTree(x+100, y, z-100);
+    addTree(x-100, y, z-100);
+    addTree(x-100, y, z+100);
+
 }
 

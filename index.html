@@ -75,6 +75,8 @@ html, body {
         <script src="js/Setup.js"></script>
         <script src="js/UserInput.js"></script>
         <script src="js/PlayerMovement.js"></script>
+        <script src="js/EnemyMovement.js"></script>
+        <script src="js/Projectiles.js"></script>
         <div id="blocker">
 
             <div id="instructions">
@@ -90,9 +92,9 @@ html, body {
         <script>
 
 
-var arrows = [];
 var camera, scene, renderer, controls;
 var mixers = [];
+var enemies = [];
 
 init();
 animate();
@@ -131,13 +133,9 @@ function animate() {
             }
         });
         movePlayer(delta);
+        moveSpiders(delta);
+        moveArrows(delta);
 
-
-
-        arrows.forEach(a => {
-            a.translateZ(-300*delta);
-        });
-        model_spider.position.z -= delta * 30;
     }
 
     renderer.render( scene, camera );
