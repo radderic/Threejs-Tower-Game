@@ -66,14 +66,14 @@ function init() {
 
     cubeGeo = new THREE.CubeGeometry(0.2, 0.2, 0.2);
     cubeMat = new THREE.MeshStandardMaterial({color: 0x00eeee});
-    cube = new THREE.Mesh(cubeGeo, cubeMat); 
+    cube = new THREE.Mesh(cubeGeo, cubeMat);
     cube.translateY(0.5);
     cube.add(cubeAxes);
     scene.add(cube);
 
     dodecGeo = new THREE.DodecahedronGeometry(0.4, 0);
     dodecMat = new THREE.MeshStandardMaterial({color: 0xee00ee});
-    dodec = new THREE.Mesh(dodecGeo, dodecMat); 
+    dodec = new THREE.Mesh(dodecGeo, dodecMat);
     dodec.position.copy(startPos);
     scene.add(dodec);
 
@@ -81,7 +81,7 @@ function init() {
 
     sphereGeo = new THREE.SphereGeometry(0.2, 16, 16);
     sphereMat = new THREE.MeshStandardMaterial({color: 0xeeeeee});
-    sphere = new THREE.Mesh(sphereGeo, sphereMat); 
+    sphere = new THREE.Mesh(sphereGeo, sphereMat);
     sphere.translateY(4.0);
     sphere.translateX(1);
     scene.add( sphere );
