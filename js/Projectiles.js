@@ -25,26 +25,19 @@ var moveArrows = function(delta) {
                 let arrowIndex = arrows.indexOf(arrow);
                 arrows.splice(arrowIndex, 1);
                 scene.remove(arrow.model);
-                let spiderIndex = spiders.indexOf(spider);
-                spiders.splice(spiderIndex, 1);
-                scene.remove(spider.model);
-                scene.remove(spider.collBox);
-                score = document.getElementById('score');
-                totalScore += 100 * arrow.power;
-                score.innerHTML = Math.floor(totalScore);
+                spider.health -= arrow.power * 50;
+                console.log(spider.health);
+                if(spider.health <= 0) {
+                    let spiderIndex = spiders.indexOf(spider);
+                    spiders.splice(spiderIndex, 1);
+                    scene.remove(spider.model);
+                    scene.remove(spider.collBox);
+                    score = document.getElementById('score');
+                    totalScore += 100 * arrow.power;
+                    score.innerHTML = Math.floor(totalScore);
+                }
             }
         });
     });
 }
 
-var updateScore = function() {
-    if(mouseIsDown) {
-        powerText = document.getElementById('power');
-        var value = parseInt(powerText.innerHTML);
-        currentTime = performance.now();
-        var power = Math.ceil((currentTime - mouseDownTime) / 10);
-        if(power <= 100) {
-            powerText.innerHTML = power;
-        }
-    }
-}

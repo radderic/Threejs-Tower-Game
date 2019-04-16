@@ -1,8 +1,7 @@
 //var camera, scene, renderer, controls;
 var clock = new THREE.Clock();
 var suppressMsg = new THREE.Vector3();
-var floors = [];
-var texLoader = new THREE.TextureLoader();
+var floor;
 
 var setup = function() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
@@ -50,8 +49,7 @@ var createEnv = function() {
     var floorGeo = new THREE.PlaneBufferGeometry( 2000, 2000, 100, 100 );
     floorGeo.rotateX( - Math.PI / 2 );
     var floorMaterial = new THREE.MeshStandardMaterial( { color: 0x006600 } );
-    var floor = new THREE.Mesh( floorGeo, floorMaterial );
-    floors.push(floor);
+    floor = new THREE.Mesh( floorGeo, floorMaterial );
     scene.add( floor );
 
     var fort = model_fort.clone();
@@ -65,12 +63,7 @@ var createEnv = function() {
     addTreeCluster(400, 0, -400);
     addTreeCluster(-400, 0, 400);
 
-    addSpider(0, 0, 400);
-    addSpider(0, 0, -400);
-    addSpider(400, 0, 0);
-    addSpider(-400, 0, 0);
-
-    addMoon(200, 600, -400);
+    addMoon(200, 400, -800);
 }
 
 var addTree = function(x, y, z) {
@@ -80,17 +73,21 @@ var addTree = function(x, y, z) {
 }
 
 var addSpider = function(x, y, z) {
-    var boxGeo = new THREE.CubeGeometry(40, 40, 80);
+    var boxGeo = new THREE.CubeGeometry(50, 50, 80);
     var boxMat = new THREE.MeshStandardMaterial({color:0xff0000});
     var collisionBox = new THREE.Mesh(boxGeo, boxMat);
-    //collisionBox.material.visible = false;
+
+    collisionBox.material.visible = false;
     //offset to make the box fit better
-    collisionBox.position.set(x+6, y+20, z+40);
+    collisionBox.position.set(x, y+40, z);
+    collisionBox.lookAt(0,20,0);
     scene.add(collisionBox);
 
     var spider = model_spider.clone();
-    spider.position.set(x, y, z);
-    //spider.lookAt(0,0,0);
+    spider.position.set(x, y+20, z);
+    spider.lookAt(0, 20, 0);
+    spider.rotateY(Math.PI);
+
     scene.add(spider);
     var mixer = new THREE.AnimationMixer(spider);
     mixers.push(mixer);
@@ -98,7 +95,7 @@ var addSpider = function(x, y, z) {
         action = mixer.clipAction(clip);
         action.play();
     });
-    var s = { model: spider, collBox: collisionBox };
+    var s = { model: spider, collBox: collisionBox, health: 100, difficulty: difficulty };
     spiders.push(s);
 }
 
@@ -120,5 +117,5 @@ var addMoon = function(x, y, z) {
 
 
 function getRandomRange(min, max) {
-    return Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min) + min);
 }

@@ -27,6 +27,42 @@ html, body {
                 background-color: rgba(0,0,0,0.5);
 
             }
+            #gameover {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,1);
+                display: none;
+                color: white;
+            }
+            #go-instructions {
+
+                width: 100%;
+                height: 100%;
+
+                display: -webkit-box;
+                display: -moz-box;
+                display: box;
+
+                -webkit-box-orient: horizontal;
+                -moz-box-orient: horizontal;
+                box-orient: horizontal;
+
+                -webkit-box-pack: center;
+                -moz-box-pack: center;
+                box-pack: center;
+
+                -webkit-box-align: center;
+                -moz-box-align: center;
+                box-align: center;
+
+                color: #ffffff;
+                text-align: center;
+
+                cursor: pointer;
+
+            }
+
 
             #instructions {
 
@@ -55,6 +91,7 @@ html, body {
                 cursor: pointer;
 
             }
+
             #crosshair {
                 position: absolute;
                 top: 50%;;
@@ -101,14 +138,21 @@ html, body {
         <script src="js/PlayerMovement.js"></script>
         <script src="js/EnemyMovement.js"></script>
         <script src="js/Projectiles.js"></script>
+        <script src="js/GameController.js"></script>
         <div id="blocker">
-
             <div id="instructions">
                 <span style="font-size:40px">Click to play</span>
                 <br />
                 (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
             </div>
         </div>
+        <div id="gameover">
+            <div id="go-instructions">
+                <p style="font-size:80px">GAME OVER</p>
+                <p>A spider reached you base</p>
+            </div>
+        </div>
+
         <div id="score-wrapper">
             Score: <span id="score">0</span>
         </div>
@@ -117,7 +161,7 @@ html, body {
         </div>
         <div id="time-wrapper">
             Time Remaining:
-            <span id="time">0</span>
+            <span id="time">360</span>
         </div>
         <div id="crosshair">
             &#8853;
@@ -127,10 +171,7 @@ html, body {
 
 
             var camera, scene, renderer, controls;
-var totalScore = 0;
-var totalTime = 0;
 var mixers = [];
-var enemies = [];
 
 init();
 animate();
@@ -157,30 +198,32 @@ function onWindowResize() {
 }
 
 function animate() {
+    if(!gameOver) {
+        requestAnimationFrame( animate );
 
-    requestAnimationFrame( animate );
+        if ( controls.isLocked === true ) {
+            let delta = clock.getDelta();
+            totalTime += delta;
 
-    if ( controls.isLocked === true ) {
-        let delta = clock.getDelta();
-        totalTime += delta;
+            //updates animations for all imported models
+            mixers.forEach(m => {
+                if(m != null) {
+                    m.update(delta);
+                }
+            });
+            time = document.getElementById('time');
+            time.innerHTML = 360 - Math.floor(totalTime);
 
-        //updates animations for all imported models
-        mixers.forEach(m => {
-            if(m != null) {
-                m.update(delta);
-            }
-        });
-        time = document.getElementById('time');
-        time.innerHTML = 360 - Math.floor(totalTime);
+            movePlayer(delta);
+            moveSpiders(delta);
+            moveArrows(delta);
+            updatePower();
+            spiderControllerUpdate();
 
-        movePlayer(delta);
-        moveSpiders(delta);
-        moveArrows(delta);
-        updateScore();
+        }
 
+        renderer.render( scene, camera );
     }
-
-    renderer.render( scene, camera );
 }
 
         </script>

@@ -5,20 +5,12 @@ var loadModels = function () {
     var loader = new THREE.GLTFLoader();
 
     loader.load(
-        'gltf/spider.glb',
+        'gltf/spider2.glb',
         function(gltf) {
             model_spider = gltf.scene;
-            scene.add(model_spider);
-
-            clips = gltf.animations;
-
-            let quaternion = new THREE.Quaternion();
-            quaternion.setFromAxisAngle( new THREE.Vector3( 0, 1, 0 ), 2*Math.PI );
-            model_spider.quaternion.copy(quaternion);
-            model_spider.lookAt(0,0,0);
-
             model_spider.scale.set(5,5,5);
 
+            clips = gltf.animations;
             var mixer = new THREE.AnimationMixer(model_spider);
             mixers.push(mixer);
             clips.forEach(clip => {
@@ -34,20 +26,6 @@ var loadModels = function () {
             console.log('error failed to load spider');
         }
     );
-
-//    loader.load(
-//        'gltf/monkey.glb',
-//        function(gltf) {
-//            model_monkey = gltf.scene;
-//            model_monkey.scale.set(10,10,10);
-//        },
-//        function(xhr) {
-//            console.log('monkey: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-//        },
-//        function(error) {
-//            console.log('error failed to load monkey');
-//        }
-//    );
 
     loader.load(
         'gltf/fort.glb',
