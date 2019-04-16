@@ -1,5 +1,6 @@
 var model_arrow, model_spider, model_fort, model_monkey, model_tree;
 var moonTexture = new THREE.TextureLoader().load( 'textures/moon.jpg' );
+var crateTexture = new THREE.TextureLoader().load( 'crate.gif' );
 var clips;
 
 var loadModels = function () {
