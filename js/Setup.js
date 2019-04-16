@@ -107,14 +107,14 @@ var addTreeCluster = function(x, y, z) {
     addTree(x-100, y, z+100);
 }
 
+
 var addMoon = function(x, y, z) {
     var moonGeo = new THREE.SphereGeometry( 50, 20, 20 );
-    var moonMat = new THREE.MeshBasicMaterial({color: 0xffffbb, fog: false});
+    var moonMat = new THREE.MeshBasicMaterial({color: 0xffffbb, fog: false, map: moonTexture});
     var moon = new THREE.Mesh( moonGeo, moonMat );
     moon.position.set(x, y, z);
     scene.add(moon);
 }
-
 
 function getRandomRange(min, max) {
     return Math.floor(Math.random() * (max - min) + min);

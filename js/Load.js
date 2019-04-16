@@ -1,4 +1,5 @@
 var model_arrow, model_spider, model_fort, model_monkey, model_tree;
+var moonTexture = new THREE.TextureLoader().load( 'textures/moon.jpg' );
 var clips;
 
 var loadModels = function () {
@@ -69,3 +70,4 @@ var loadModels = function () {
         }
     );
 }
+
