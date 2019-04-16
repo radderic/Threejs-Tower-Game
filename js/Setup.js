@@ -64,6 +64,22 @@ var createEnv = function() {
     addTreeCluster(-400, 0, 400);
 
     addMoon(200, 400, -800);
+    
+    addCrate(220,10,220);
+	addCrate(240,10,250);
+	addPile(250,10,370);
+	
+	addStack(-250,10,365);
+	addCrate(-282,10,370);
+	
+	addCrate(-150,10,-150);
+	addCrate(-155,10,-180);
+	
+	addStack(365,10,-250);
+	addCrate(282,10,-370);
+	
+	addRock(-365,0,250, 20);
+	addRock(155,0,-180,10);
 }
 
 var addTree = function(x, y, z) {
@@ -114,6 +130,33 @@ var addMoon = function(x, y, z) {
     var moon = new THREE.Mesh( moonGeo, moonMat );
     moon.position.set(x, y, z);
     scene.add(moon);
+}
+var addRock = function(x,y,z,radius){
+	var geometry = new THREE.SphereGeometry( radius, 6, 6 );
+	var material = new THREE.MeshBasicMaterial({color: 0x808080, fog: true});
+	var object = new THREE.Mesh( geometry, material );
+	object.position.set(x, y, z);
+    scene.add(object);
+}
+
+var addCrate = function(x, y, z){
+	
+	var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
+	var material = new THREE.MeshBasicMaterial( { map: crateTexture } );
+	mesh = new THREE.Mesh( geometry, material );
+	mesh.position.set(x,y,z);
+	scene.add(mesh);
+	
+}
+var addPile = function(x,y,z){
+	addCrate(x,y,z);
+	addCrate(x+25,y,z+5);
+	addCrate(x+13,y+20,z-5);
+}
+var addStack = function(x,y,z){
+	addCrate(x,y,z);
+	addCrate(x+3,y+20,z-1);
+	addCrate(x-2,y+40,z+2);
 }
 
 function getRandomRange(min, max) {
