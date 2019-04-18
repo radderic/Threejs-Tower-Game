@@ -8,7 +8,7 @@ var canJump = false;
 
 var raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
 
-var movePlayer = function(delta) {
+var movePlayer = function() {
     raycaster.ray.origin.copy( controls.getObject().position );
     raycaster.ray.origin.y -= 10;
 

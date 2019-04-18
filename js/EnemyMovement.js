@@ -1,6 +1,6 @@
 var spiders = []
 
-var moveSpiders = function(delta) {
+var moveSpiders = function() {
     spiders.forEach(spider => {
         spider.model.translateZ(-delta * 30 * spider.difficulty);
         spider.collBox.translateZ(delta * 30 * spider.difficulty);

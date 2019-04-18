@@ -21,7 +21,6 @@ var setup = function() {
     }, false );
 
     controls.addEventListener( 'lock', function () {
-
         instructions.style.display = 'none';
         blocker.style.display = 'none';
         clock.start();
@@ -29,7 +28,6 @@ var setup = function() {
     } );
 
     controls.addEventListener( 'unlock', function () {
-
         blocker.style.display = 'block';
         instructions.style.display = '';
         clock.stop();
@@ -44,6 +42,7 @@ var createEnv = function() {
     scene.fog = new THREE.Fog( 0x111111, 0, 600 );
 
     var light = new THREE.AmbientLight( 0xffffff, 2.0 );
+    light.name = 'ambientlight'
     scene.add( light );
 
     var floorGeo = new THREE.PlaneBufferGeometry( 2000, 2000, 100, 100 );
@@ -64,20 +63,20 @@ var createEnv = function() {
     addTreeCluster(-400, 0, 400);
 
     addMoon(200, 400, -800);
-    
+
     addCrate(220,10,220);
 	addCrate(240,10,250);
 	addPile(250,10,370);
-	
+
 	addStack(-250,10,365);
 	addCrate(-282,10,370);
-	
+
 	addCrate(-150,10,-150);
 	addCrate(-155,10,-180);
-	
+
 	addStack(365,10,-250);
 	addCrate(282,10,-370);
-	
+
 	addRock(-365,0,250, 20);
 	addRock(155,0,-180,10);
 }
@@ -126,27 +125,28 @@ var addTreeCluster = function(x, y, z) {
 
 var addMoon = function(x, y, z) {
     var moonGeo = new THREE.SphereGeometry( 50, 20, 20 );
-    var moonMat = new THREE.MeshBasicMaterial({color: 0xffffbb, fog: false, map: moonTexture});
+    var moonMat = new THREE.MeshToonMaterial({color: 0xffffbb, fog: false, map: moonTexture});
     var moon = new THREE.Mesh( moonGeo, moonMat );
     moon.position.set(x, y, z);
+    moon.name = 'moon';
     scene.add(moon);
 }
 var addRock = function(x,y,z,radius){
 	var geometry = new THREE.SphereGeometry( radius, 6, 6 );
-	var material = new THREE.MeshBasicMaterial({color: 0x808080, fog: true});
+	var material = new THREE.MeshToonMaterial({color: 0x808080, fog: true});
 	var object = new THREE.Mesh( geometry, material );
 	object.position.set(x, y, z);
     scene.add(object);
 }
 
 var addCrate = function(x, y, z){
-	
+
 	var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
-	var material = new THREE.MeshBasicMaterial( { map: crateTexture } );
+	var material = new THREE.MeshToonMaterial( { map: crateTexture } );
 	mesh = new THREE.Mesh( geometry, material );
 	mesh.position.set(x,y,z);
 	scene.add(mesh);
-	
+
 }
 var addPile = function(x,y,z){
 	addCrate(x,y,z);

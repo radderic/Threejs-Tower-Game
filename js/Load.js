@@ -1,6 +1,6 @@
 var model_arrow, model_spider, model_fort, model_monkey, model_tree;
 var moonTexture = new THREE.TextureLoader().load( 'textures/moon.jpg' );
-var crateTexture = new THREE.TextureLoader().load( 'crate.gif' );
+var crateTexture = new THREE.TextureLoader().load( 'textures/crate.gif' );
 var clips;
 
 var loadModels = function () {
@@ -23,6 +23,8 @@ var loadModels = function () {
         },
         function(xhr) {
             console.log('spider: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+            var loading = document.getElementById('loaded');
+            loading.innerHTML = 'Spider: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded';
         },
         function(error) {
             console.log('error failed to load spider');
@@ -37,6 +39,8 @@ var loadModels = function () {
         },
         function(xhr) {
             console.log('fort: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+            var loading = document.getElementById('loaded');
+            loading.innerHTML = 'Fort: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded';
         },
         function(error) {
             console.log('error failed to load fort');
@@ -51,6 +55,8 @@ var loadModels = function () {
         },
         function(xhr) {
             console.log( 'arrow: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+            var loading = document.getElementById('loaded');
+            loading.innerHTML = 'Arrow: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded';
         },
         function(error) {
             console.log('errrrror');
@@ -65,6 +71,8 @@ var loadModels = function () {
         },
         function(xhr) {
             console.log( "tree: " + ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+            var loading = document.getElementById('loaded');
+            loading.innerHTML = 'Trrow: ' + ( xhr.loaded / xhr.total * 100 ) + '% loaded';
         },
         function(error) {
             console.log('error failed to load tree');

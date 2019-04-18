@@ -5,6 +5,8 @@ var totalTime = 0;
 var gameOver = false;
 var spawnCooldown = 0;
 var lastSpawn = 0;
+var delta = 0;
+const surviveTime = 10;
 
 var updatePower = function() {
     if(mouseIsDown) {
@@ -19,8 +21,8 @@ var updatePower = function() {
 }
 
 var spiderControllerUpdate = function() {
-    var spawnrate = (totalTime / 360);
-    difficulty = 1 + (totalTime / 360);
+    var spawnrate = (totalTime / surviveTime);
+    difficulty = 1 + (totalTime / surviveTime);
     const spawnCooldown = 10;
     const spawnpoints = [
         {x: 800, y: 0, z: 0},
@@ -28,8 +30,8 @@ var spiderControllerUpdate = function() {
         {x: 0, y: 0, z: 800},
         {x: 0, y: 0, z: -800}];
 
-    lastSpawn += clock.getDelta()*100;
-    if(lastSpawn > spawnCooldown) {
+    lastSpawn += delta;
+    if(lastSpawn > spawnCooldown / difficulty) {
         var r = getRandomRange(0, 4);
 
         addSpider(
@@ -37,6 +39,7 @@ var spiderControllerUpdate = function() {
             spawnpoints[r].y,
             spawnpoints[r].z);
         console.log(`spider spawned at ${spawnpoints[r].x}, ${spawnpoints[r].z}`);
+        console.log(spawnCooldown / difficulty);
         lastSpawn = 0;
     }
 }

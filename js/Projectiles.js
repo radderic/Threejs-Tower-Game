@@ -1,6 +1,6 @@
 var arrows = []
 
-var moveArrows = function(delta) {
+var moveArrows = function() {
     arrows.forEach(arrow => {
         arrow.model.translateZ(arrow.power*-300*delta);
 
