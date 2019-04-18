@@ -6,7 +6,7 @@ var gameOver = false;
 var spawnCooldown = 0;
 var lastSpawn = 0;
 var delta = 0;
-const surviveTime = 10;
+const surviveTime = 360;
 
 var updatePower = function() {
     if(mouseIsDown) {
